@@ -1,14 +1,41 @@
+/* eslint-disable class-methods-use-this */
 import AbortController from 'abort-controller';
+import SchedulerInterface from '../scheduler-interface';
 
-export default class MicroCurrentScheduler {
-  static schedule(fn) {
+let INSTANCE;
+/**
+ * A Scheduler that allows micro scheduling on the current thread.
+ */
+export default class MicroCurrentScheduler extends SchedulerInterface {
+  static get instance() {
+    if (typeof INSTANCE === 'undefined') {
+      INSTANCE = new MicroCurrentScheduler();
+    }
+    return INSTANCE;
+  }
+
+  /**
+   * Schedules the function immediately on the micro task.
+   * @param {!function} fn
+   */
+  schedule(fn) {
     if (typeof fn === 'function') {
       // eslint-disable-next-line no-new
       Promise.resolve().then(() => fn());
     }
   }
 
-  static delay(fn, amount) {
+  /**
+   * Schedules the given function at a delayed time on the micro task.
+   * @param {!function} fn
+   * A function that is called after being scheduled.
+   * @param {!number} amount
+   * The amount of delay in milliseconds.
+   * @returns {AbortController}
+   * Returns an AbortController that allows
+   * to abort the schedule.
+   */
+  delay(fn, amount) {
     const controller = new AbortController();
     if (typeof fn === 'function') {
       const { signal } = controller;
