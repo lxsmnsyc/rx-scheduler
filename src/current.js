@@ -46,6 +46,8 @@ export default class CurrentScheduler extends SchedulerInterface {
       }, amount);
 
       signal.addEventListener('abort', () => clearTimeout(inner));
+    } else {
+      controller.abort();
     }
     return controller;
   }
