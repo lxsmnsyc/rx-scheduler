@@ -1,17 +1,27 @@
+/* eslint-disable class-methods-use-this */
 import ImmediateCurrentScheduler from './immediate';
 import MicroCurrentScheduler from './micro';
 import MacroCurrentScheduler from './macro';
+import SchedulerGroup from '../scheduler-group';
 
-export default class CurrentScheduler {
-  static get immediate() {
-    return ImmediateCurrentScheduler;
+let INSTANCE;
+export default class CurrentScheduler extends SchedulerGroup {
+  static get instance() {
+    if (typeof INSTANCE === 'undefined') {
+      INSTANCE = new MicroCurrentScheduler();
+    }
+    return INSTANCE;
   }
 
-  static get micro() {
-    return MicroCurrentScheduler;
+  get immediate() {
+    return ImmediateCurrentScheduler.instance;
   }
 
-  static get macro() {
-    return MacroCurrentScheduler;
+  get micro() {
+    return MicroCurrentScheduler.instance;
+  }
+
+  get macro() {
+    return MacroCurrentScheduler.instance;
   }
 }
