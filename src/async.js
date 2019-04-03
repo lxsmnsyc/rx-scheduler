@@ -49,6 +49,8 @@ export default class AsyncScheduler extends SchedulerInterface {
 
         signal.addEventListener('abort', () => clearTimeout(inner));
       });
+    } else {
+      controller.abort();
     }
     return controller;
   }
