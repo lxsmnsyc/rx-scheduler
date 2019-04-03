@@ -50,6 +50,8 @@ export default class TickScheduler extends SchedulerInterface {
 
         signal.addEventListener('abort', () => clearTimeout(inner));
       });
+    } else {
+      controller.abort();
     }
     return controller;
   }
