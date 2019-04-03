@@ -82,6 +82,8 @@ class ImmediateScheduler extends SchedulerInterface {
         signal.addEventListener('abort', () => clearTimeout(inner));
       });
       signal.addEventListener('abort', () => clearImmediate(handler));
+    } else {
+      controller.abort();
     }
     return controller;
   }
@@ -136,6 +138,8 @@ class AsyncScheduler extends SchedulerInterface {
 
         signal.addEventListener('abort', () => clearTimeout(inner));
       });
+    } else {
+      controller.abort();
     }
     return controller;
   }
@@ -190,6 +194,8 @@ class TimeoutScheduler extends SchedulerInterface {
         signal.addEventListener('abort', () => clearTimeout(inner));
       }, 0);
       signal.addEventListener('abort', () => clearTimeout(timeout));
+    } else {
+      controller.abort();
     }
     return controller;
   }
@@ -241,6 +247,8 @@ class CurrentScheduler extends SchedulerInterface {
       }, amount);
 
       signal.addEventListener('abort', () => clearTimeout(inner));
+    } else {
+      controller.abort();
     }
     return controller;
   }
@@ -296,6 +304,8 @@ class TickScheduler extends SchedulerInterface {
 
         signal.addEventListener('abort', () => clearTimeout(inner));
       });
+    } else {
+      controller.abort();
     }
     return controller;
   }
