@@ -2,6 +2,42 @@
 
 Reactive Extensions - an object that specifies an API for scheduling units of work
 
+## Install
+
+NPM
+
+```bash
+npm i rx-scheduler
+```
+
+CDN
+
+* jsDelivr
+```html
+<script src="https://cdn.jsdelivr.net/npm/rx-scheduler/dist/index.min.js"></script>
+```
+
+* unpkg
+```html
+<script src="https://unpkg.com/rx-scheduler/dist/index.min.js"></script>
+```
+
+## Usage
+
+### Loading the module
+
+#### CommonJS
+
+```js
+const Scheduler = require('rx-scheduler');
+```
+
+Loading the CommonJS module provides the Scheduler class.
+
+#### Browser
+
+Loading the JavaScript file for the rx-scheduler provides the Scheduler class
+
 ## Example
 
 ```js
@@ -46,3 +82,37 @@ There are three scheduler types
 | Async | Schedules the task in async fashion. |
 | Timeout | Schedules the task using ```setTimeout``` |
 | Tick | NodeJS only. Schedules the task immediately after the current thread. |
+
+## Creating your own Scheduler
+
+You can create your own Scheduler that is recognizable by the implementations by extending ```Scheduler.interface```
+
+```js
+class MyScheduler extends Scheduler.interface {
+  schedule(fn) {
+    // scheduling logic
+  }
+
+  delay(fn, amount) {
+    // delayed scheduling logic
+  }
+}
+```
+
+## Documentation
+
+You can read the documentation at the [official doc site](https://lxsmnsyc.github.io/rx-scheduler/)
+
+## Build
+
+Clone the repo first, then run the following to install the dependencies
+
+```bash
+npm install
+```
+
+To build the coverages, run the test suite, the docs, and the distributable modules:
+
+```bash
+npm run build
+```
