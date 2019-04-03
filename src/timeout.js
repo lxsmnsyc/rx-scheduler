@@ -49,6 +49,8 @@ export default class TimeoutScheduler extends SchedulerInterface {
         signal.addEventListener('abort', () => clearTimeout(inner));
       }, 0);
       signal.addEventListener('abort', () => clearTimeout(timeout));
+    } else {
+      controller.abort();
     }
     return controller;
   }
