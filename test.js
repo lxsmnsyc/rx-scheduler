@@ -1,11 +1,14 @@
 const AbortController = require('abort-controller');
 const Scheduler = require('./index');
 
-Scheduler.current.macro.delay(() => console.log('Hello World, Macro 100'), 100);
-Scheduler.current.micro.delay(() => console.log('Hello World, Micro 100'), 100);
-Scheduler.current.immediate.delay(() => console.log('Hello World, Immediate 100'), 100);
+Scheduler.immediate.delay(() => console.log('Hello World, Immediate 100'), 100);
+Scheduler.timeout.delay(() => console.log('Hello World, Timeout 100'), 100);
+Scheduler.async.delay(() => console.log('Hello World, Async 100'), 100);
+Scheduler.tick.delay(() => console.log('Hello World, Tick 100'), 100);
+Scheduler.current.delay(() => console.log('Hello World, Current 100'), 100);
 
-Scheduler.current.macro.schedule(() => console.log('Hello World, Macro'));
-Scheduler.current.micro.schedule(() => console.log('Hello World, Micro'));
-Scheduler.current.immediate.schedule(() => console.log('Hello World, Immediate'));
-
+Scheduler.immediate.schedule(() => console.log('Hello World, Immediate'));
+Scheduler.timeout.schedule(() => console.log('Hello World, Timeout'));
+Scheduler.async.schedule(() => console.log('Hello World, Async'));
+Scheduler.tick.schedule(() => console.log('Hello World, Tick'));
+Scheduler.current.schedule(() => console.log('Hello World, Current'));
