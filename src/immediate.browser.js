@@ -48,6 +48,8 @@ export default class ImmediateScheduler extends SchedulerInterface {
         signal.addEventListener('abort', () => clearTimeout(inner));
       });
       signal.addEventListener('abort', () => cancelAnimationFrame(handler));
+    } else {
+      controller.abort();
     }
     return controller;
   }
