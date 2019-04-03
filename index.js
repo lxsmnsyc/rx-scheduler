@@ -39,7 +39,7 @@ class SchedulerInterface {
 let INSTANCE;
 
 /**
- * A Scheduler that allows immediate scheduling on the current thread.
+ * A Scheduler that allows immediate scheduling, using setImmediate.
  */
 class ImmediateScheduler extends SchedulerInterface {
   static get instance() {
@@ -50,17 +50,17 @@ class ImmediateScheduler extends SchedulerInterface {
   }
 
   /**
-   * Schedules the function immediately on the current task.
+   * Schedules the function immediately.
    * @param {!function} fn
    */
   schedule(fn) {
     if (typeof fn === 'function') {
-      fn();
+      setImmediate(fn);
     }
   }
 
   /**
-   * Schedules the given function at a delayed time on the current task.
+   * Schedules the given function at a delayed time.
    * @param {!function} fn
    * A function that is called after being scheduled.
    * @param {!number} amount
@@ -73,10 +73,15 @@ class ImmediateScheduler extends SchedulerInterface {
     const controller = new AbortController();
     if (typeof fn === 'function') {
       const { signal } = controller;
+      const handler = setImmediate(() => {
+        const inner = setTimeout(() => {
+          fn();
+          controller.abort();
+        }, amount);
 
-      const inner = setTimeout(fn, amount);
-
-      signal.addEventListener('abort', () => clearTimeout(inner));
+        signal.addEventListener('abort', () => clearTimeout(inner));
+      });
+      signal.addEventListener('abort', () => clearImmediate(handler));
     }
     return controller;
   }
@@ -86,18 +91,18 @@ class ImmediateScheduler extends SchedulerInterface {
 
 let INSTANCE$1;
 /**
- * A Scheduler that allows micro scheduling on the current thread.
+ * A Scheduler that allows async scheduling on the current thread.
  */
-class MicroScheduler extends SchedulerInterface {
+class AsyncScheduler extends SchedulerInterface {
   static get instance() {
     if (typeof INSTANCE$1 === 'undefined') {
-      INSTANCE$1 = new MicroScheduler();
+      INSTANCE$1 = new AsyncScheduler();
     }
     return INSTANCE$1;
   }
 
   /**
-   * Schedules the function immediately on the micro task.
+   * Schedules the function immediately on the async task.
    * @param {!function} fn
    */
   schedule(fn) {
@@ -108,7 +113,7 @@ class MicroScheduler extends SchedulerInterface {
   }
 
   /**
-   * Schedules the given function at a delayed time on the micro task.
+   * Schedules the given function at a delayed time on the async task.
    * @param {!function} fn
    * A function that is called after being scheduled.
    * @param {!number} amount
@@ -140,18 +145,18 @@ class MicroScheduler extends SchedulerInterface {
 
 let INSTANCE$2;
 /**
- * A Scheduler that allows macro scheduling on the current thread.
+ * A Scheduler that allows timeout scheduling on the current thread.
  */
-class MacroScheduler extends SchedulerInterface {
+class TimeoutScheduler extends SchedulerInterface {
   static get instance() {
     if (typeof INSTANCE$2 === 'undefined') {
-      INSTANCE$2 = new MacroScheduler();
+      INSTANCE$2 = new TimeoutScheduler();
     }
     return INSTANCE$2;
   }
 
   /**
-   * Schedules the function immediately on the macro task.
+   * Schedules the function immediately on the timeout task.
    * @param {!function} fn
    */
   schedule(fn) {
@@ -162,7 +167,7 @@ class MacroScheduler extends SchedulerInterface {
   }
 
   /**
-   * Schedules the given function at a delayed time on the macro task.
+   * Schedules the given function at a delayed time on the timeout task.
    * @param {!function} fn
    * A function that is called after being scheduled.
    * @param {!number} amount
@@ -177,7 +182,10 @@ class MacroScheduler extends SchedulerInterface {
       const { signal } = controller;
 
       const timeout = setTimeout(() => {
-        const inner = setTimeout(fn, amount);
+        const inner = setTimeout(() => {
+          fn();
+          controller.abort();
+        }, amount);
 
         signal.addEventListener('abort', () => clearTimeout(inner));
       }, 0);
@@ -189,17 +197,171 @@ class MacroScheduler extends SchedulerInterface {
 
 /* eslint-disable class-methods-use-this */
 
+let INSTANCE$3;
+
+/**
+ * A Scheduler that allows scheduling on the current thread.
+ */
+class CurrentScheduler extends SchedulerInterface {
+  static get instance() {
+    if (typeof INSTANCE$3 === 'undefined') {
+      INSTANCE$3 = new CurrentScheduler();
+    }
+    return INSTANCE$3;
+  }
+
+  /**
+   * Schedules the function on the current task.
+   * @param {!function} fn
+   */
+  schedule(fn) {
+    if (typeof fn === 'function') {
+      fn();
+    }
+  }
+
+  /**
+   * Schedules the given function at a delayed time on the current task.
+   * @param {!function} fn
+   * A function that is called after being scheduled.
+   * @param {!number} amount
+   * The amount of delay in milliseconds.
+   * @returns {AbortController}
+   * Returns an AbortController that allows
+   * to abort the schedule.
+   */
+  delay(fn, amount) {
+    const controller = new AbortController();
+    if (typeof fn === 'function') {
+      const { signal } = controller;
+
+      const inner = setTimeout(() => {
+        fn();
+        controller.abort();
+      }, amount);
+
+      signal.addEventListener('abort', () => clearTimeout(inner));
+    }
+    return controller;
+  }
+}
+
+/* eslint-disable class-methods-use-this */
+
+let INSTANCE$4;
+
+/**
+ * A Scheduler that allows scheduling using process.nextTick.
+ */
+class TickScheduler extends SchedulerInterface {
+  static get instance() {
+    if (typeof INSTANCE$4 === 'undefined') {
+      INSTANCE$4 = new TickScheduler();
+    }
+    return INSTANCE$4;
+  }
+
+  /**
+   * Schedules the function immediately.
+   * @param {!function} fn
+   */
+  schedule(fn) {
+    if (typeof fn === 'function') {
+      process.nextTick(fn);
+    }
+  }
+
+  /**
+   * Schedules the given function at a delayed time.
+   * @param {!function} fn
+   * A function that is called after being scheduled.
+   * @param {!number} amount
+   * The amount of delay in milliseconds.
+   * @returns {AbortController}
+   * Returns an AbortController that allows
+   * to abort the schedule.
+   */
+  delay(fn, amount) {
+    const controller = new AbortController();
+    if (typeof fn === 'function') {
+      const { signal } = controller;
+      process.nextTick(() => {
+        if (signal.aborted) {
+          return;
+        }
+        const inner = setTimeout(() => {
+          fn();
+          controller.abort();
+        }, amount);
+
+        signal.addEventListener('abort', () => clearTimeout(inner));
+      });
+    }
+    return controller;
+  }
+}
+
+/* eslint-disable class-methods-use-this */
+
+/**
+ * Scheduler is an object that specifies an API for scheduling units of work.
+ * These units of work are scheduled either executed immediately or enqueued and
+ * executed using a callback mechanism.
+ *
+ * Scheduler provides 5 types of scheduling mechanism:
+ * - Current: executes the task immediately.
+ * - Immediate: schedules the task for the next frame.
+ * - Async: schedules the task asynchronously (as a microtask).
+ * - Timeout: schedules the task using setTimeout.
+ * - Tick: schedules the task using process.nextTick.
+ */
 class Scheduler {
-  get immediate() {
+  /**
+   * Interface for all scheduler types.
+   */
+  static get interface() {
+    return SchedulerInterface;
+  }
+
+  /**
+   * A Scheduler that allows scheduling on the current thread.
+   * @returns {CurrentScheduler}
+   */
+  static get current() {
+    return CurrentScheduler.instance;
+  }
+
+  /**
+   * A Scheduler that allows immediate scheduling, using requestAnimationFrame.
+   * @returns {ImmediateScheduler}
+   */
+  static get immediate() {
     return ImmediateScheduler.instance;
   }
 
-  get micro() {
-    return MicroScheduler.instance;
+  /**
+   * A Scheduler that allows async scheduling on the current thread.
+   * @returns {AsyncScheduler}
+   */
+  static get async() {
+    return AsyncScheduler.instance;
   }
 
-  get macro() {
-    return MacroScheduler.instance;
+  /**
+   * A Scheduler that allows timeout scheduling on the current thread.
+   * @returns {TimeoutScheduler}
+   */
+  static get timeout() {
+    return TimeoutScheduler.instance;
+  }
+
+
+  /**
+   * A Scheduler that allows scheduling using process.nextTick.
+   * @returns {TickScheduler}
+   */
+  static get tick() {
+    return TickScheduler.instance;
   }
 }
 
