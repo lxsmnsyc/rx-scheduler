@@ -1,14 +1,41 @@
+/* eslint-disable class-methods-use-this */
 import AbortController from 'abort-controller';
+import SchedulerInterface from '../scheduler-interface';
 
-export default class MacroCurrentScheduler {
-  static schedule(fn) {
+let INSTANCE;
+/**
+ * A Scheduler that allows macro scheduling on the current thread.
+ */
+export default class MacroCurrentScheduler extends SchedulerInterface {
+  static get instance() {
+    if (typeof INSTANCE === 'undefined') {
+      INSTANCE = new MacroCurrentScheduler();
+    }
+    return INSTANCE;
+  }
+
+  /**
+   * Schedules the function immediately on the macro task.
+   * @param {!function} fn
+   */
+  schedule(fn) {
     if (typeof fn === 'function') {
       // eslint-disable-next-line no-new
       setTimeout(fn, 0);
     }
   }
 
-  static delay(fn, amount) {
+  /**
+   * Schedules the given function at a delayed time on the macro task.
+   * @param {!function} fn
+   * A function that is called after being scheduled.
+   * @param {!number} amount
+   * The amount of delay in milliseconds.
+   * @returns {AbortController}
+   * Returns an AbortController that allows
+   * to abort the schedule.
+   */
+  delay(fn, amount) {
     const controller = new AbortController();
     if (typeof fn === 'function') {
       const { signal } = controller;
