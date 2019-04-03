@@ -81,6 +81,8 @@ var Scheduler = (function (AbortController) {
           signal.addEventListener('abort', () => clearTimeout(inner));
         });
         signal.addEventListener('abort', () => cancelAnimationFrame(handler));
+      } else {
+        controller.abort();
       }
       return controller;
     }
@@ -135,6 +137,8 @@ var Scheduler = (function (AbortController) {
 
           signal.addEventListener('abort', () => clearTimeout(inner));
         });
+      } else {
+        controller.abort();
       }
       return controller;
     }
@@ -189,6 +193,8 @@ var Scheduler = (function (AbortController) {
           signal.addEventListener('abort', () => clearTimeout(inner));
         }, 0);
         signal.addEventListener('abort', () => clearTimeout(timeout));
+      } else {
+        controller.abort();
       }
       return controller;
     }
@@ -240,6 +246,8 @@ var Scheduler = (function (AbortController) {
         }, amount);
 
         signal.addEventListener('abort', () => clearTimeout(inner));
+      } else {
+        controller.abort();
       }
       return controller;
     }
