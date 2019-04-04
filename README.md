@@ -2,6 +2,19 @@
 
 Reactive Extensions - an object that specifies an API for scheduling units of work
 
+[![NPM](https://nodei.co/npm/rx-scheduler.png)](https://nodei.co/npm/rx-scheduler/)
+
+[![](https://data.jsdelivr.com/v1/package/npm/rx-scheduler/badge)](https://www.jsdelivr.com/package/npm/rx-scheduler)
+[![HitCount](http://hits.dwyl.io/lxsmnsyc/rx-scheduler.svg)](http://hits.dwyl.io/lxsmnsyc/rx-scheduler)
+
+| Platform | Build Status |
+| --- | --- |
+| Linux | [![Build Status](https://travis-ci.org/LXSMNSYC/rx-scheduler.svg?branch=master)](https://travis-ci.org/LXSMNSYC/rx-scheduler) |
+| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/mkjwe462uk80axx4?svg=true)](https://ci.appveyor.com/project/LXSMNSYC/rx-scheduler) |
+
+
+[![codecov](https://codecov.io/gh/LXSMNSYC/rx-scheduler/branch/master/graph/badge.svg)](https://codecov.io/gh/LXSMNSYC/rx-scheduler)
+
 ## Install
 
 NPM
