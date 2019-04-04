@@ -1,6 +1,6 @@
 {
   "name": "rx-scheduler",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "an object that specifies an API for scheduling units of work",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,6 @@
     "browser": "npm run linux-browser || npm run win-browser",
     "minify": "npm run linux-minify || npm run win-minify",
     "build": "npm run cjs && npm run minify && npm run docs && npm test"
-  
   },
   "repository": {
     "type": "git",
