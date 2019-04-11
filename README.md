@@ -135,7 +135,8 @@ npm run build
 ```
 
 ## Changelogs
-
+* 0.2.1
+  - scheduled functions now cancels the `Cancellable` instance when finished.
 * 0.2.0
   - Replaced AbortController with [Cancellable](https://lxsmnsyc.github.io/rx-cancellable/).
   - `schedule` and `delay` now returns a `Cancellable` to cancel schedules.
