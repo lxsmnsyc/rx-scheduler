@@ -1,8 +1,12 @@
 /* eslint-disable class-methods-use-this */
-import AbortController from 'abort-controller';
 import SchedulerInterface from './scheduler-interface';
+import { schedule, delay } from './utils';
 
 let INSTANCE;
+
+const func = x => x();
+const sched = schedule(func);
+const timed = delay(func);
 
 /**
  * A Scheduler that allows scheduling on the current thread.
@@ -18,11 +22,13 @@ export default class CurrentScheduler extends SchedulerInterface {
   /**
    * Schedules the function on the current task.
    * @param {!function} fn
+   * A function that is called after being scheduled.
+   * @returns {Cancellable}
+   * Returns an Cancellable that allows
+   * to cancel the schedule.
    */
   schedule(fn) {
-    if (typeof fn === 'function') {
-      fn();
-    }
+    return sched(fn);
   }
 
   /**
@@ -31,24 +37,11 @@ export default class CurrentScheduler extends SchedulerInterface {
    * A function that is called after being scheduled.
    * @param {!number} amount
    * The amount of delay in milliseconds.
-   * @returns {AbortController}
-   * Returns an AbortController that allows
-   * to abort the schedule.
+   * @returns {Cancellable}
+   * Returns an Cancellable that allows
+   * to cancel the schedule.
    */
   delay(fn, amount) {
-    const controller = new AbortController();
-    if (typeof fn === 'function') {
-      const { signal } = controller;
-
-      const inner = setTimeout(() => {
-        fn();
-        controller.abort();
-      }, amount);
-
-      signal.addEventListener('abort', () => clearTimeout(inner));
-    } else {
-      controller.abort();
-    }
-    return controller;
+    return timed(fn, amount);
   }
 }
