@@ -27,11 +27,13 @@ CDN
 
 * jsDelivr
 ```html
+<script src="https://cdn.jsdelivr.net/npm/rx-cancellable/dist/index.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/rx-scheduler/dist/index.min.js"></script>
 ```
 
 * unpkg
 ```html
+<script src="https://unpkg.com/rx-cancellable/dist/index.min.js"></script>
 <script src="https://unpkg.com/rx-scheduler/dist/index.min.js"></script>
 ```
 
@@ -96,6 +98,8 @@ There are three scheduler types
 | Timeout | Schedules the task using ```setTimeout``` |
 | Tick | NodeJS only. Schedules the task immediately after the current thread. |
 
+Each scheduler types has two methods: `schedule`, which executes the schedule immediately on their own threads and `delay`, which schedules the function with a timer on their own threads. Both methods return a Cancellable instance, that allows you to cancel the scheduled functions if necessary.
+
 ## Creating your own Scheduler
 
 You can create your own Scheduler that is recognizable by the implementations by extending ```Scheduler.interface```
@@ -129,3 +133,11 @@ To build the coverages, run the test suite, the docs, and the distributable modu
 ```bash
 npm run build
 ```
+
+## Changelogs
+
+* 0.2.0
+  - Replaced AbortController with [Cancellable](https://lxsmnsyc.github.io/rx-cancellable/).
+  - `schedule` and `delay` now returns a `Cancellable` to cancel schedules.
+* 0.1.0
+  - Release
