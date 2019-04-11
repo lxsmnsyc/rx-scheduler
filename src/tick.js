@@ -1,8 +1,12 @@
 /* eslint-disable class-methods-use-this */
-import AbortController from 'abort-controller';
 import SchedulerInterface from './scheduler-interface';
+import { schedule, delay } from './utils';
 
 let INSTANCE;
+
+const func = x => process.nextTick(x);
+const sched = schedule(func);
+const timed = delay(func);
 
 /**
  * A Scheduler that allows scheduling using process.nextTick.
@@ -18,11 +22,13 @@ export default class TickScheduler extends SchedulerInterface {
   /**
    * Schedules the function immediately.
    * @param {!function} fn
+   * A function that is called after being scheduled.
+   * @returns {Cancellable}
+   * Returns an Cancellable that allows
+   * to cancel the schedule.
    */
   schedule(fn) {
-    if (typeof fn === 'function') {
-      process.nextTick(fn);
-    }
+    return sched(fn);
   }
 
   /**
@@ -31,28 +37,11 @@ export default class TickScheduler extends SchedulerInterface {
    * A function that is called after being scheduled.
    * @param {!number} amount
    * The amount of delay in milliseconds.
-   * @returns {AbortController}
-   * Returns an AbortController that allows
-   * to abort the schedule.
+   * @returns {Cancellable}
+   * Returns an Cancellable that allows
+   * to cancel the schedule.
    */
   delay(fn, amount) {
-    const controller = new AbortController();
-    if (typeof fn === 'function') {
-      const { signal } = controller;
-      process.nextTick(() => {
-        if (signal.aborted) {
-          return;
-        }
-        const inner = setTimeout(() => {
-          fn();
-          controller.abort();
-        }, amount);
-
-        signal.addEventListener('abort', () => clearTimeout(inner));
-      });
-    } else {
-      controller.abort();
-    }
-    return controller;
+    return timed(fn, amount);
   }
 }
