@@ -1,4 +1,3 @@
-const AbortController = require('abort-controller');
 const Scheduler = require('./index');
 
 Scheduler.immediate.delay(() => console.log('Hello World, Immediate 100'), 100);
