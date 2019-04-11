@@ -8,7 +8,9 @@ export default class SchedulerInterface {
    * Schedules the given function immediately.
    * @param {!function} fn
    * A function that is called after being scheduled.
-   *
+   * @returns {Cancellable}
+   * Returns an Cancellable that allows
+   * to cancel the schedule.
    * @abstract
    */
   schedule(fn) {}
@@ -19,9 +21,9 @@ export default class SchedulerInterface {
    * A function that is called after being scheduled.
    * @param {!number} amount
    * The amount of delay in milliseconds.
-   * @returns {AbortController}
-   * Returns an AbortController that allows
-   * to abort the schedule.
+   * @returns {Cancellable}
+   * Returns an Cancellable that allows
+   * to cancel the schedule.
    * @abstract
    */
   delay(fn, amount) {
