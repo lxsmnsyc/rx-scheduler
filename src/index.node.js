@@ -27,7 +27,7 @@
  * @copyright Alexis Munsayac 2019
  */
 /**
- * @external {AbortController} https://developer.mozilla.org/en-US/docs/Web/API/AbortController
+ * @external {Cancellable} https://lxsmnsyc.github.io/rx-cancellable/
  */
 import ImmediateScheduler from './immediate.node';
 import AsyncScheduler from './async';
