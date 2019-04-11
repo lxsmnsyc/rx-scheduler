@@ -1,8 +1,13 @@
 /* eslint-disable class-methods-use-this */
-import AbortController from 'abort-controller';
 import SchedulerInterface from './scheduler-interface';
+import { schedule, delay } from './utils';
 
 let INSTANCE;
+
+const func = x => Promise.resolve().then(x);
+const sched = schedule(func);
+const timed = delay(func);
+
 /**
  * A Scheduler that allows async scheduling on the current thread.
  */
@@ -17,12 +22,13 @@ export default class AsyncScheduler extends SchedulerInterface {
   /**
    * Schedules the function immediately on the async task.
    * @param {!function} fn
+   * A function that is called after being scheduled.
+   * @returns {Cancellable}
+   * Returns an Cancellable that allows
+   * to cancel the schedule.
    */
   schedule(fn) {
-    if (typeof fn === 'function') {
-      // eslint-disable-next-line no-new
-      Promise.resolve().then(() => fn());
-    }
+    return sched(fn);
   }
 
   /**
@@ -31,27 +37,11 @@ export default class AsyncScheduler extends SchedulerInterface {
    * A function that is called after being scheduled.
    * @param {!number} amount
    * The amount of delay in milliseconds.
-   * @returns {AbortController}
-   * Returns an AbortController that allows
-   * to abort the schedule.
+   * @returns {Cancellable}
+   * Returns an Cancellable that allows
+   * to cancel the schedule.
    */
   delay(fn, amount) {
-    const controller = new AbortController();
-    if (typeof fn === 'function') {
-      const { signal } = controller;
-
-      // eslint-disable-next-line no-new
-      Promise.resolve().then(() => {
-        if (signal.aborted) {
-          return;
-        }
-        const inner = setTimeout(fn, amount);
-
-        signal.addEventListener('abort', () => clearTimeout(inner));
-      });
-    } else {
-      controller.abort();
-    }
-    return controller;
+    return timed(fn, amount);
   }
 }
