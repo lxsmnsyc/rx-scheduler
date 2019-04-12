@@ -135,6 +135,8 @@ npm run build
 ```
 
 ## Changelogs
+* 0.2.2
+  - Compliance with rx-cancellable@0.2.0
 * 0.2.1
   - scheduled functions now cancels the `Cancellable` instance when finished.
 * 0.2.0
