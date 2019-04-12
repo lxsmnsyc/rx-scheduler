@@ -1,9 +1,9 @@
-import Cancellable from 'rx-cancellable';
+import { BooleanCancellable } from 'rx-cancellable';
 /**
  * @ignore
  */
 const createController = (scheduler, fn, body) => {
-  const controller = new Cancellable();
+  const controller = new BooleanCancellable();
   if (typeof fn === 'function') {
     // eslint-disable-next-line no-new
     scheduler(() => body(controller));
