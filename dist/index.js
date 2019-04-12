@@ -306,4 +306,4 @@ var Scheduler = (function (rxCancellable) {
 
   return Scheduler;
 
-}(rxCancellable));
+}(Cancellable));
