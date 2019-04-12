@@ -52,7 +52,7 @@ var Scheduler = (function (rxCancellable) {
   const schedule = scheduler => fn => createController(
     scheduler,
     fn,
-    x => x.cancel() && fn(),
+    x => !x.cancelled && fn() && x.cancel(),
   );
   /**
    * @ignore
@@ -64,7 +64,7 @@ var Scheduler = (function (rxCancellable) {
       if (x.cancelled) {
         return;
       }
-      const inner = setTimeout(() => x.cancel() && fn(), amount);
+      const inner = setTimeout(() => !x.cancelled && fn() && x.cancel(), amount);
 
       x.addEventListener('cancel', () => clearTimeout(inner));
     },
