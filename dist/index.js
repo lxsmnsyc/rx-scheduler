@@ -1,7 +1,5 @@
-var Scheduler = (function (Cancellable) {
+var Scheduler = (function (rxCancellable) {
   'use strict';
-
-  Cancellable = Cancellable && Cancellable.hasOwnProperty('default') ? Cancellable['default'] : Cancellable;
 
   /* eslint-disable no-unused-vars */
   /* eslint-disable class-methods-use-this */
@@ -39,7 +37,7 @@ var Scheduler = (function (Cancellable) {
    * @ignore
    */
   const createController = (scheduler, fn, body) => {
-    const controller = new Cancellable();
+    const controller = new rxCancellable.BooleanCancellable();
     if (typeof fn === 'function') {
       // eslint-disable-next-line no-new
       scheduler(() => body(controller));
@@ -308,4 +306,4 @@ var Scheduler = (function (Cancellable) {
 
   return Scheduler;
 
-}(Cancellable));
+}(rxCancellable));
