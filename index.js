@@ -1,8 +1,6 @@
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var Cancellable = _interopDefault(require('rx-cancellable'));
+var rxCancellable = require('rx-cancellable');
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
@@ -40,7 +38,7 @@ class SchedulerInterface {
  * @ignore
  */
 const createController = (scheduler, fn, body) => {
-  const controller = new Cancellable();
+  const controller = new rxCancellable.BooleanCancellable();
   if (typeof fn === 'function') {
     // eslint-disable-next-line no-new
     scheduler(() => body(controller));
