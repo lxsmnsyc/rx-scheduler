@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import assert from 'assert';
-import Cancellable from 'rx-cancellable';
+import { Cancellable } from 'rx-cancellable';
 import Scheduler from '../src/index.node';
 import SchedulerInterface from '../src/scheduler-interface';
 import CurrentScheduler from '../src/current';
