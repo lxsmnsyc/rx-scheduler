@@ -135,6 +135,8 @@ npm run build
 ```
 
 ## Changelogs
+* 0.2.3
+  - Delayed schedules with 0 time will be executed immediately.
 * 0.2.2
   - Compliance with rx-cancellable@0.2.0
 * 0.2.1
