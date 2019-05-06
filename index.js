@@ -42,7 +42,6 @@ const protect = (fn, x) => {
     fn();
   } catch (e) {
     x.cancel();
-    throw e;
   }
 };
 /**
