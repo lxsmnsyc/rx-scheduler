@@ -41,7 +41,6 @@ var Scheduler = (function (rxCancellable) {
       fn();
     } catch (e) {
       x.cancel();
-      throw e;
     }
   };
   /**
