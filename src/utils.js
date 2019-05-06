@@ -30,8 +30,13 @@ export const delay = scheduler => (fn, amount) => createController(
     if (x.cancelled) {
       return;
     }
-    const inner = setTimeout(() => !x.cancelled && fn() && x.cancel(), amount);
 
-    x.addEventListener('cancel', () => clearTimeout(inner));
+    if (typeof amount === 'number' && amount > 0) {
+      const inner = setTimeout(() => !x.cancelled && fn() && x.cancel(), amount);
+      x.addEventListener('cancel', () => clearTimeout(inner));
+    } else {
+      fn();
+      x.cancel();
+    }
   },
 );
