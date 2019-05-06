@@ -135,6 +135,8 @@ npm run build
 ```
 
 ## Changelogs
+* 0.2.6
+  - Guaranteed cancel if the schedule handlers throw an error.
 * 0.2.5
   - Delayed schedules with 0 time will be executed immediately.
 * 0.2.2
