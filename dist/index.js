@@ -36,6 +36,17 @@ var Scheduler = (function (rxCancellable) {
   /**
    * @ignore
    */
+  const protect = (fn, x) => {
+    try {
+      fn();
+    } catch (e) {
+      x.cancel();
+      throw e;
+    }
+  };
+  /**
+   * @ignore
+   */
   const createController = (scheduler, fn, body) => {
     const controller = new rxCancellable.BooleanCancellable();
     if (typeof fn === 'function') {
@@ -52,7 +63,7 @@ var Scheduler = (function (rxCancellable) {
   const schedule = scheduler => fn => createController(
     scheduler,
     fn,
-    x => !x.cancelled && fn() && x.cancel(),
+    x => !x.cancelled && protect(fn, x),
   );
   /**
    * @ignore
@@ -66,11 +77,10 @@ var Scheduler = (function (rxCancellable) {
       }
 
       if (typeof amount === 'number' && amount > 0) {
-        const inner = setTimeout(() => !x.cancelled && fn() && x.cancel(), amount);
+        const inner = setTimeout(() => !x.cancelled && protect(fn, x), amount);
         x.addEventListener('cancel', () => clearTimeout(inner));
       } else {
-        fn();
-        x.cancel();
+        protect(fn, x);
       }
     },
   );
