@@ -1,6 +1,6 @@
 {
   "name": "rx-scheduler",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "an object that specifies an API for scheduling units of work",
   "main": "index.js",
   "scripts": {
