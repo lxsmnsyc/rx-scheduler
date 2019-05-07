@@ -39,7 +39,7 @@ var Scheduler = (function (rxCancellable) {
   const protect = (fn, x) => {
     try {
       fn();
-    } catch (e) {
+    } finally {
       x.cancel();
     }
   };
