@@ -3,9 +3,17 @@ import SchedulerInterface from './scheduler-interface';
 import { schedule, delay } from './utils';
 
 let INSTANCE;
-
+/**
+ * @ignore
+ */
 const func = x => setImmediate(x);
+/**
+ * @ignore
+ */
 const sched = schedule(func);
+/**
+ * @ignore
+ */
 const timed = delay(func);
 
 /**
