@@ -88,7 +88,7 @@ Hello World, Immediate 100
 
 ## Scheduler Types
 
-There are three scheduler types
+There are 4 major scheduler types
 
 | Type | Description |
 | --- | --- |
@@ -96,7 +96,17 @@ There are three scheduler types
 | Immediate | Schedules the task immediately for the next frame, using setImmediate (NodeJS) or requestAnimationFrame (Browser). |
 | Async | Schedules the task in async fashion. |
 | Timeout | Schedules the task using ```setTimeout``` |
+
+There are 1 NodeJS exclusive types
+| Type | Description |
+| --- | --- |
 | Tick | NodeJS only. Schedules the task immediately after the current thread. |
+
+There are 2 Browser exclusive types
+| Type | Description |
+| --- | --- |
+| Worker | Browser only. Schedules the task on a worker thread. The worker thread does not execute the task, but rather, the event the worker emits notifies the schedule execution. |
+| Pool | Browser only. Schedules the task on an idle worker from the worker pool. Like the Worker, The worker thread does not execute the task, but rather, the event the worker emits notifies the schedule execution. The time of execution may vary due to varying execution times/responses from different worker threads. |
 
 Each scheduler types has two methods: `schedule`, which executes the schedule immediately on their own threads and `delay`, which schedules the function with a timer on their own threads. Both methods return a Cancellable instance, that allows you to cancel the scheduled functions if necessary.
 
@@ -135,6 +145,8 @@ npm run build
 ```
 
 ## Changelogs
+* 0.3.0
+  - Introduces 2 new Browser-exclusive schedulers: Worker and Pool.
 * 0.2.6
   - Guaranteed cancel if the schedule handlers throw an error.
 * 0.2.5
