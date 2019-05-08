@@ -2,10 +2,21 @@
 import SchedulerInterface from './scheduler-interface';
 import { schedule, delay } from './utils';
 
+/**
+ * @ignore
+ */
 let INSTANCE;
-
+/**
+ * @ignore
+ */
 const func = x => x();
+/**
+ * @ignore
+ */
 const sched = schedule(func);
+/**
+ * @ignore
+ */
 const timed = delay(func);
 
 /**
