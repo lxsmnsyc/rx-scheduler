@@ -88,9 +88,17 @@ const delay = scheduler => (fn, amount) => createController(
 /* eslint-disable class-methods-use-this */
 
 let INSTANCE;
-
+/**
+ * @ignore
+ */
 const func = x => setImmediate(x);
+/**
+ * @ignore
+ */
 const sched = schedule(func);
+/**
+ * @ignore
+ */
 const timed = delay(func);
 
 /**
@@ -133,10 +141,22 @@ class ImmediateScheduler extends SchedulerInterface {
 
 /* eslint-disable class-methods-use-this */
 
+/**
+ * @ignore
+ */
 let INSTANCE$1;
 
+/**
+ * @ignore
+ */
 const func$1 = x => Promise.resolve().then(x);
+/**
+ * @ignore
+ */
 const sched$1 = schedule(func$1);
+/**
+ * @ignore
+ */
 const timed$1 = delay(func$1);
 
 /**
@@ -180,9 +200,17 @@ class AsyncScheduler extends SchedulerInterface {
 /* eslint-disable class-methods-use-this */
 
 let INSTANCE$2;
-
+/**
+ * @ignore
+ */
 const func$2 = x => setTimeout(x, 0);
+/**
+ * @ignore
+ */
 const sched$2 = schedule(func$2);
+/**
+ * @ignore
+ */
 const timed$2 = delay(func$2);
 /**
  * A Scheduler that allows timeout scheduling on the current thread.
@@ -224,10 +252,21 @@ class TimeoutScheduler extends SchedulerInterface {
 
 /* eslint-disable class-methods-use-this */
 
+/**
+ * @ignore
+ */
 let INSTANCE$3;
-
+/**
+ * @ignore
+ */
 const func$3 = x => x();
+/**
+ * @ignore
+ */
 const sched$3 = schedule(func$3);
+/**
+ * @ignore
+ */
 const timed$3 = delay(func$3);
 
 /**
@@ -271,9 +310,17 @@ class CurrentScheduler extends SchedulerInterface {
 /* eslint-disable class-methods-use-this */
 
 let INSTANCE$4;
-
+/**
+ * @ignore
+ */
 const func$4 = x => process.nextTick(x);
+/**
+ * @ignore
+ */
 const sched$4 = schedule(func$4);
+/**
+ * @ignore
+ */
 const timed$4 = delay(func$4);
 
 /**
