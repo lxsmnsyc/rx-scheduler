@@ -35,6 +35,8 @@ import AsyncScheduler from './async';
 import TimeoutScheduler from './timeout';
 import CurrentScheduler from './current';
 import SchedulerInterface from './scheduler-interface';
+import WorkerScheduler from './worker.browser';
+import PoolScheduler from './pool.browser';
 
 /**
  * Scheduler is an object that specifies an API for scheduling units of work.
@@ -85,5 +87,13 @@ export default class Scheduler {
    */
   static get timeout() {
     return TimeoutScheduler.instance;
+  }
+
+  static get worker() {
+    return WorkerScheduler.instance;
+  }
+
+  static get pool() {
+    return PoolScheduler.instance;
   }
 }
